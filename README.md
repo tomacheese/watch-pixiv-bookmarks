@@ -1,6 +1,7 @@
 # watch-pixiv-bookmarks
 
-Monitor pixiv bookmarks and notify Discord when new items are added.
+Monitor pixiv bookmarks and notify Discord when new items are added.  
+Currently, only illustrations in private bookmarks are supported.
 
 ## Installation
 
