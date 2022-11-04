@@ -2,7 +2,6 @@ import json
 import os
 import time
 from datetime import datetime
-from pprint import pprint
 
 import requests
 from pixivpy3 import AppPixivAPI
@@ -10,6 +9,7 @@ from pixivpy3 import AppPixivAPI
 from src import add_notified_id, load_notified_ids, remove_html_tags
 
 TOKEN_FILE = os.environ.setdefault('PIXIVPY_TOKEN_FILE', '/data/token.json')
+PIXIV_USER_ID = os.environ.get('PIXIV_USER_ID')
 DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
 DISCORD_CHANNEL_ID = os.environ.get('DISCORD_CHANNEL_ID')
 
@@ -29,7 +29,7 @@ def main():
     with open(TOKEN_FILE, "w", encoding="utf-8") as f:
         f.write(json.dumps(token))
 
-    bookmarks = api.user_bookmarks_illust(16568776, restrict="private")
+    bookmarks = api.user_bookmarks_illust(int(PIXIV_USER_ID), restrict="private")
     if "illusts" not in bookmarks:
         raise Exception("No illusts in bookmarks")
 
