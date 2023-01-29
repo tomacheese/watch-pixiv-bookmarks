@@ -1,7 +1,7 @@
 # watch-pixiv-bookmarks
 
 Monitor pixiv bookmarks and notify Discord when new items are added.  
-Currently, only illustrations in private bookmarks are supported.
+Currently, only illustration bookmarks are supported.
 
 ## Installation
 
@@ -16,13 +16,13 @@ version: "3"
 
 services:
   app:
-    image: ghcr.io/tomacheese/watch-pixiv-bookmarks
+    image: ghcr.io/tomacheese/watch-pixiv-bookmarks:latest
     volumes:
       - type: bind
         source: ./data/
         target: /data/
-    env_file:
-      - .env
+    environment:
+      PIXIV_USER_ID: 1234556789
     restart: always
     init: true
 ```
@@ -30,7 +30,8 @@ services:
 ### 2. Get pixiv token and write
 
 Retrieve the refresh token by referring to [Retrieving Auth Token (with Selenium)](https://gist.github.com/upbit/6edda27cb1644e94183291109b8a5fde), etc.  
-Then, write the refresh token (`<REFRESH-TOKEN>`) in `data/token.json` in the following format.
+Then, write the refresh token (`<REFRESH-TOKEN>`) in `data/token.json` in the following format.  
+If the environment variable `TOKEN_FILE` is set, the specified value is taken as the path to the configuration file.
 
 ```json
 {
@@ -38,16 +39,18 @@ Then, write the refresh token (`<REFRESH-TOKEN>`) in `data/token.json` in the fo
 }
 ```
 
-### 3. Write configuration file
+### 3. Configuration
 
-Describe the settings in the `.env` file with reference to the following configuration items.
+The configuration file `data/config.json` is used by default.  
+If the environment variable `CONFIG_FILE` is set, the specified value is taken as the path to the configuration file.
 
-- `PIXIV_USER_ID`: ID of pixiv users to be monitored
-- `DISCORD_TOKEN`: Discord bot token
-- `DISCORD_CHANNEL_ID`: ID of the channel to be notified
-- `PIXIVPY_TOKEN_FILE` (optional): Token file path for pixivpy library (Default: `/data/token.json`)
+See here for the JSON Schema of the configuration file: [schema/Configuration.json](schema/Configuration.json)
 
-(Discord Webhook is not supported. Please create a pull request if necessary.)
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/tomacheese/watch-pixiv-bookmarks/master/schema/Configuration.json"
+}
+```
 
 ### 4. Build and Run
 
