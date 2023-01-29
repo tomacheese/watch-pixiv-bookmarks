@@ -1,18 +1,16 @@
 /* eslint-disable unicorn/no-null */
 import { loadPixiv, Pixiv } from './pixiv'
-import fs from 'node:fs'
-import { loadConfig, PATH } from './config'
+import { Configuration, loadConfig } from './config'
 import { Notified } from './notified'
 import { DiscordEmbed, sendDiscordMessage } from './discord'
 
-function getTargetUserId() {
+function getTargetUserId(config: Configuration) {
   // config.json の user_id か、環境変数の PIXIV_USER_ID から取る
   // 環境変数 PIXIV_USER_ID を優先する
 
-  const config = fs.existsSync(PATH.CONFIG_FILE)
-    ? JSON.parse(fs.readFileSync(PATH.CONFIG_FILE, 'utf8'))
-    : {}
-  const userId = process.env.PIXIV_USER_ID || config.user_id
+  const userId =
+    process.env.PIXIV_USER_ID ||
+    (config.pixiv ? config.pixiv.user_id : undefined)
   if (!userId) {
     throw new Error('user_id is not defined')
   }
@@ -38,8 +36,8 @@ function formatDateTime(date: Date) {
 
 async function main() {
   const pixiv = await loadPixiv()
-  const userId = getTargetUserId()
   const config = loadConfig()
+  const userId = getTargetUserId(config)
   const isFirst = Notified.isFirst()
 
   const publicBookmarkIllusts = await pixiv.getIllustBookmarks({
@@ -137,9 +135,9 @@ async function main() {
     }
 
     if (!isFirst) {
-      const stream = await Pixiv.getImageStream(imageUrl)
+      const arraybuffer = await Pixiv.getImageStream(imageUrl)
 
-      await sendDiscordMessage(config, '', embed, stream)
+      await sendDiscordMessage(config, '', embed, arraybuffer)
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 

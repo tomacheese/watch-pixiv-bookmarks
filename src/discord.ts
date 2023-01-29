@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { ReadStream } from 'node:fs'
 import FormData from 'form-data'
 import { Configuration } from './config'
 
@@ -68,7 +67,7 @@ export async function sendDiscordMessage(
   config: Configuration,
   text: string,
   embed?: DiscordEmbed,
-  stream?: ReadStream
+  arraybuffer?: ArrayBuffer
 ): Promise<void> {
   const formData = new FormData()
   formData.append(
@@ -79,8 +78,8 @@ export async function sendDiscordMessage(
     })
   )
 
-  if (stream) {
-    formData.append('file', stream, {
+  if (arraybuffer) {
+    formData.append('file', arraybuffer, {
       filename: 'image.png',
       contentType: 'image/png',
     })
@@ -93,7 +92,7 @@ export async function sendDiscordMessage(
       headers: formData.getHeaders(),
     })
 
-    if (response.status !== 204) {
+    if (response.status !== 204 && response.status !== 200) {
       throw new Error(`Discord webhook failed (${response.status})`)
     }
     return
@@ -110,7 +109,7 @@ export async function sendDiscordMessage(
         },
       }
     )
-    if (response.status !== 200) {
+    if (response.status !== 200 && response.status !== 204) {
       throw new Error(`Discord bot failed (${response.status})`)
     }
   }
