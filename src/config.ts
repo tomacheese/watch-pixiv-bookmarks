@@ -1,9 +1,9 @@
 import fs from 'node:fs'
 
 export const PATH = {
-  CONFIG_FILE: process.env.CONFIG_PATH || 'data/config.json',
-  NOTIFIED_FILE: process.env.NOTIFIED_PATH || 'data/notified.json',
-  TOKEN_FILE: process.env.TOKEN_PATH || 'data/token.json',
+  CONFIG_FILE: process.env.CONFIG_FILE || 'data/config.json',
+  NOTIFIED_FILE: process.env.NOTIFIED_FILE || 'data/notified.json',
+  TOKEN_FILE: process.env.TOKEN_FILE || 'data/token.json',
 }
 
 export interface Configuration {

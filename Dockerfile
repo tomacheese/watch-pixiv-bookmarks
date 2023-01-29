@@ -30,6 +30,7 @@ COPY --from=builder /app/output .
 
 ENV NODE_ENV=production
 ENV CONFIG_FILE=/data/config.json
+ENV NOTIFIED_FILE=/data/notified.json
 ENV TOKEN_FILE=/data/token.json
 
 COPY entrypoint.sh .
