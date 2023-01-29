@@ -2,7 +2,7 @@
 
 while :
 do
-  python -m src
+  node index.js || true
 
   # wait 5 minutes
   echo Waiting 5 minutes...

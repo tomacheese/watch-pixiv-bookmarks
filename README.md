@@ -1,7 +1,7 @@
 # watch-pixiv-bookmarks
 
 Monitor pixiv bookmarks and notify Discord when new items are added.  
-Currently, only illustrations in private bookmarks are supported.
+Currently, only illustration bookmarks are supported.
 
 ## Installation
 
@@ -16,13 +16,13 @@ version: "3"
 
 services:
   app:
-    image: ghcr.io/tomacheese/watch-pixiv-bookmarks
+    image: ghcr.io/tomacheese/watch-pixiv-bookmarks:latest
     volumes:
       - type: bind
         source: ./data/
         target: /data/
-    env_file:
-      - .env
+    environment:
+      PIXIV_USER_ID: 1234556789
     restart: always
     init: true
 ```
@@ -37,17 +37,6 @@ Then, write the refresh token (`<REFRESH-TOKEN>`) in `data/token.json` in the fo
   "refresh_token": "<REFRESH-TOKEN>"
 }
 ```
-
-### 3. Write configuration file
-
-Describe the settings in the `.env` file with reference to the following configuration items.
-
-- `PIXIV_USER_ID`: ID of pixiv users to be monitored
-- `DISCORD_TOKEN`: Discord bot token
-- `DISCORD_CHANNEL_ID`: ID of the channel to be notified
-- `PIXIVPY_TOKEN_FILE` (optional): Token file path for pixivpy library (Default: `/data/token.json`)
-
-(Discord Webhook is not supported. Please create a pull request if necessary.)
 
 ### 4. Build and Run
 
