@@ -16,6 +16,10 @@ export interface Configuration {
     /** Discord channel ID (required if using bot) */
     channel_id?: string
   }
+  pixiv?: {
+    /** Pixiv user_id */
+    user_id: string
+  }
   filter?: {
     /** Ignore tags */
     ignore_tags: string[]

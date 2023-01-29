@@ -4,7 +4,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import qs from 'qs'
 import crypto from 'node:crypto'
 import { PATH } from './config'
-import fs, { ReadStream } from 'node:fs'
+import fs from 'node:fs'
 import { PixivIllustItem } from './models/pixiv-illust'
 import { PixivNovelItem } from './models/pixiv-novel'
 
@@ -141,20 +141,21 @@ export class Pixiv {
   }
 
   /**
-   * 画像のストリームを取得する。
+   * 画像データを取得する。axiosでarraybufferを指定している
    *
    * @param url 画像の URL
-   * @returns 画像のストリーム
+   * @returns 画像データ
    */
-  public static async getImageStream(url: string): Promise<ReadStream> {
-    return axios.get(url, {
+  public static async getImageStream(url: string): Promise<ArrayBuffer> {
+    const { data } = await axios.get(url, {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
         Referer: 'https://www.pixiv.net/',
       },
-      responseType: 'stream',
+      responseType: 'arraybuffer',
     })
+    return data
   }
 
   public async getIllustBookmarks(options: GetIllustBookmarksOptions) {

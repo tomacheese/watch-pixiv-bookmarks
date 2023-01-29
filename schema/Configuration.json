@@ -33,6 +33,18 @@
                 "ignore_tags"
             ],
             "type": "object"
+        },
+        "pixiv": {
+            "properties": {
+                "user_id": {
+                    "description": "Pixiv user_id",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "user_id"
+            ],
+            "type": "object"
         }
     },
     "required": [
