@@ -84,7 +84,7 @@ async function main() {
       create_date: createDateRaw,
     } = illust
 
-    const caption = captionRaw.replace(/<("[^"]*"|'[^']*'|[^"'>])*>/g, '')
+    const caption = captionRaw.replaceAll(/<("[^"]*"|'[^']*'|[^"'>])*>/g, '')
     const createDate = new Date(createDateRaw)
     const tags = tagLists.map((tag) => tag.name)
 
