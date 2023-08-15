@@ -25,11 +25,11 @@ function formatDateTime(date: Date) {
   // 0埋めして YYYY-MM-DD HH:mm:ss にする
   return (
     [date.getFullYear(), pad(date.getMonth() + 1), pad(date.getDate())].join(
-      '-'
+      '-',
     ) +
     ' ' +
     [pad(date.getHours()), pad(date.getMinutes()), pad(date.getSeconds())].join(
-      ':'
+      ':',
     )
   )
 }
@@ -46,7 +46,7 @@ async function main() {
   })
   if (publicBookmarkIllusts.status !== 200) {
     throw new Error(
-      `Failed to get illust public bookmarks: ${publicBookmarkIllusts.status} ${publicBookmarkIllusts.data}`
+      `Failed to get illust public bookmarks: ${publicBookmarkIllusts.status} ${publicBookmarkIllusts.data}`,
     )
   }
   const privateBookmarkIllusts = await pixiv.getIllustBookmarks({
@@ -55,7 +55,7 @@ async function main() {
   })
   if (privateBookmarkIllusts.status !== 200) {
     throw new Error(
-      `Failed to get illust private bookmarks: ${privateBookmarkIllusts.status} ${privateBookmarkIllusts.data}`
+      `Failed to get illust private bookmarks: ${privateBookmarkIllusts.status} ${privateBookmarkIllusts.data}`,
     )
   }
   const bookmarkIllusts = [
@@ -68,7 +68,7 @@ async function main() {
     })
 
   const filteredBookmarkIllusts = bookmarkIllusts.filter(
-    (illust) => !Notified.isNotified(illust.id)
+    (illust) => !Notified.isNotified(illust.id),
   )
 
   for (const illust of filteredBookmarkIllusts) {

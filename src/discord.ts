@@ -67,7 +67,7 @@ export async function sendDiscordMessage(
   config: Configuration,
   text: string,
   embed?: DiscordEmbed,
-  arraybuffer?: ArrayBuffer
+  arraybuffer?: ArrayBuffer,
 ): Promise<void> {
   const formData = new FormData()
   formData.append(
@@ -75,7 +75,7 @@ export async function sendDiscordMessage(
     JSON.stringify({
       content: text,
       embeds: [embed],
-    })
+    }),
   )
 
   if (arraybuffer) {
@@ -107,7 +107,7 @@ export async function sendDiscordMessage(
           ...formData.getHeaders(),
           Authorization: `Bot ${config.discord.token}`,
         },
-      }
+      },
     )
     if (response.status !== 200 && response.status !== 204) {
       throw new Error(`Discord bot failed (${response.status})`)
