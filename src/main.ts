@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-null */
 import { loadPixiv, Pixiv } from './pixiv'
 import { Configuration, loadConfig } from './config'
 import { Notified } from './notified'
@@ -9,7 +8,7 @@ function getTargetUserId(config: Configuration) {
   // 環境変数 PIXIV_USER_ID を優先する
 
   const userId =
-    process.env.PIXIV_USER_ID ||
+    process.env.PIXIV_USER_ID ??
     (config.pixiv ? config.pixiv.user_id : undefined)
   if (!userId) {
     throw new Error('user_id is not defined')
@@ -46,7 +45,7 @@ async function main() {
   })
   if (publicBookmarkIllusts.status !== 200) {
     throw new Error(
-      `Failed to get illust public bookmarks: ${publicBookmarkIllusts.status} ${publicBookmarkIllusts.data}`,
+      `Failed to get illust public bookmarks: ${publicBookmarkIllusts.status} ${JSON.stringify(publicBookmarkIllusts.data)}`,
     )
   }
   const privateBookmarkIllusts = await pixiv.getIllustBookmarks({
@@ -55,7 +54,7 @@ async function main() {
   })
   if (privateBookmarkIllusts.status !== 200) {
     throw new Error(
-      `Failed to get illust private bookmarks: ${privateBookmarkIllusts.status} ${privateBookmarkIllusts.data}`,
+      `Failed to get illust private bookmarks: ${privateBookmarkIllusts.status} ${JSON.stringify(privateBookmarkIllusts.data)}`,
     )
   }
   const bookmarkIllusts = [
@@ -90,7 +89,7 @@ async function main() {
 
     console.log(`[Illust] ${title} ${illustId}`)
 
-    if (config.filter && config.filter.ignore_tags) {
+    if (config.filter?.ignore_tags) {
       const ignoreTags = config.filter.ignore_tags
       if (tags.some((tag) => ignoreTags.includes(tag))) {
         continue
@@ -147,7 +146,7 @@ async function main() {
 }
 
 ;(async () => {
-  await main().catch((error) => {
+  await main().catch((error: unknown) => {
     console.error(error)
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1)

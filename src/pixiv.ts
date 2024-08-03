@@ -31,7 +31,7 @@ interface AddIllustBookmarkOptions {
   restrict: 'public' | 'private'
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface AddIllustBookmarksApiResponse {}
 
 interface AddNovelBookmarkOptions {
@@ -39,7 +39,7 @@ interface AddNovelBookmarkOptions {
   restrict: 'public' | 'private'
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface AddNovelBookmarksApiResponse {}
 
 interface RequestOptions {
@@ -122,7 +122,10 @@ export class Pixiv {
       refresh_token: refreshToken,
     })
 
-    const response = await axios.post(authUrl, data, {
+    const response = await axios.post<{
+      user: { id: string }
+      response: { access_token: string; refresh_token: string }
+    }>(authUrl, data, {
       headers,
       validateStatus: () => true,
     })
@@ -147,7 +150,7 @@ export class Pixiv {
    * @returns 画像データ
    */
   public static async getImageStream(url: string): Promise<ArrayBuffer> {
-    const { data } = await axios.get(url, {
+    const { data } = await axios.get<ArrayBuffer>(url, {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
@@ -216,7 +219,7 @@ export class Pixiv {
    * @param str 文字列
    * @returns ハッシュ
    */
-  // eslint-disable-next-line unicorn/prevent-abbreviations
+
   private static hash(str: string) {
     const hash = crypto.createHash('md5')
     return hash.update(str + this.hashSecret).digest('hex')
@@ -232,6 +235,7 @@ export class Pixiv {
     if (options.method === 'GET') {
       return this.axios.get<T>(options.path, { params: options.params })
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (options.method === 'POST') {
       return this.axios.post<T>(options.path, qs.stringify(options.data), {
         headers: {
@@ -266,7 +270,7 @@ export async function loadPixiv() {
   }
 
   const data = fs.readFileSync(PATH.TOKEN_FILE, 'utf8')
-  const json = JSON.parse(data)
+  const json = JSON.parse(data) as { refresh_token: string; datetime: string }
   const pixiv = await Pixiv.of(json.refresh_token)
   if (json.refresh_token !== pixiv.refreshToken) {
     fs.writeFileSync(
@@ -276,7 +280,7 @@ export async function loadPixiv() {
           refresh_token: pixiv.refreshToken,
           datetime: new Date().toISOString(),
         },
-        // eslint-disable-next-line unicorn/no-null
+
         null,
         2,
       ),
