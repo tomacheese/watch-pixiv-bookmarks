@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import fs from 'node:fs'
 
 export const PATH = {
-  CONFIG_FILE: process.env.CONFIG_FILE || 'data/config.json',
-  NOTIFIED_FILE: process.env.NOTIFIED_FILE || 'data/notified.json',
-  TOKEN_FILE: process.env.TOKEN_FILE || 'data/token.json',
+  CONFIG_FILE: process.env.CONFIG_FILE ?? 'data/config.json',
+  NOTIFIED_FILE: process.env.NOTIFIED_FILE ?? 'data/notified.json',
+  TOKEN_FILE: process.env.TOKEN_FILE ?? 'data/token.json',
 }
 
 export interface Configuration {
@@ -31,21 +34,21 @@ const isConfig = (config: any): config is Configuration => {
     config &&
     typeof config.discord === 'object' &&
     // webhook_url があるか token と channel_id があるか
-    (config.discord.webhook_url ||
+    (config.discord.webhook_url ??
       (config.discord.token && config.discord.channel_id)) &&
     // webhook_url があるとき、string である
-    (config.discord.webhook_url === undefined ||
+    (config.discord.webhook_url === undefined ??
       typeof config.discord.webhook_url === 'string') &&
     // token があるとき、string である
-    (config.discord.token === undefined ||
+    (config.discord.token === undefined ??
       typeof config.discord.token === 'string') &&
     // channel_id があるとき、string である
-    (config.discord.channel_id === undefined ||
+    (config.discord.channel_id === undefined ??
       typeof config.discord.channel_id === 'string') &&
     // filter があるとき、object である
-    (config.filter === undefined || typeof config.filter === 'object') &&
+    (config.filter === undefined ?? typeof config.filter === 'object') &&
     // filter.ignore_tags があるとき、string[] である
-    (config.filter?.ignore_tags === undefined ||
+    (config.filter?.ignore_tags === undefined ??
       Array.isArray(config.filter.ignore_tags))
   )
 }
