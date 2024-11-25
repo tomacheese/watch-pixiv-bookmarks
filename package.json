@@ -29,7 +29,7 @@
     "@types/node": "22.9.3",
     "@types/qs": "6.9.17",
     "@vercel/ncc": "0.38.3",
-    "axios": "1.7.7",
+    "axios": "1.7.8",
     "eslint": "9.15.0",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.31.0",
