@@ -382,6 +382,8 @@ async function main() {
 
   await processIllusts(pixiv, discord, isFirst)
   await processNovels(pixiv, discord, isFirst)
+
+  await pixiv.close()
 }
 
 ;(async () => {
