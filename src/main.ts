@@ -89,7 +89,7 @@ async function getImageArrayBuffer(url: string): Promise<ArrayBuffer> {
 }
 
 async function getIllusts(pixiv: Pixiv, targetUserId: number) {
-  const logger = Logger.configure('getItems')
+  const logger = Logger.configure('getIllusts')
 
   const bookmarkPublicIllusts = await pixiv.userBookmarksIllust({
     userId: targetUserId,
@@ -120,7 +120,7 @@ async function getIllusts(pixiv: Pixiv, targetUserId: number) {
 }
 
 async function getNovels(pixiv: Pixiv, targetUserId: number) {
-  const logger = Logger.configure('getItems')
+  const logger = Logger.configure('getNovels')
 
   const bookmarkPublicNovels = await pixiv.userBookmarksNovel({
     userId: targetUserId,
