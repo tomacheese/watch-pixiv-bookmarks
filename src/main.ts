@@ -380,8 +380,12 @@ async function main() {
     return
   }
 
-  await processIllusts(pixiv, discord, isFirst)
-  await processNovels(pixiv, discord, isFirst)
+  try {
+    await processIllusts(pixiv, discord, isFirst)
+    await processNovels(pixiv, discord, isFirst)
+  } finally {
+    await pixiv.close()
+  }
 }
 
 ;(async () => {
