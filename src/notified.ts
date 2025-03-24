@@ -1,26 +1,40 @@
 import fs from 'node:fs'
-import { PATH } from './config'
+
+type NotifiedType = 'illust' | 'novel'
+
+interface NotifiedJson {
+  illust: number[]
+  novel: number[]
+}
 
 export class Notified {
   public static isFirst(): boolean {
-    const path = PATH.NOTIFIED_FILE
+    const path = process.env.NOTIFIED_FILE ?? 'data/notified.json'
     return !fs.existsSync(path)
   }
 
-  public static isNotified(illustId: number): boolean {
-    const path = PATH.NOTIFIED_FILE
-    const json: number[] = fs.existsSync(path)
+  public static isNotified(type: NotifiedType, itemId: number): boolean {
+    const path = process.env.NOTIFIED_FILE ?? 'data/notified.json'
+    const json: NotifiedJson = fs.existsSync(path)
       ? JSON.parse(fs.readFileSync(path, 'utf8'))
-      : []
-    return json.includes(illustId)
+      : {
+          illust: [],
+          novel: [],
+        }
+
+    return json[type].includes(itemId)
   }
 
-  public static addNotified(illustId: number): void {
-    const path = PATH.NOTIFIED_FILE
-    const json: number[] = fs.existsSync(path)
+  public static addNotified(type: NotifiedType, itemId: number): void {
+    const path = process.env.NOTIFIED_FILE ?? 'data/notified.json'
+    const json: NotifiedJson = fs.existsSync(path)
       ? JSON.parse(fs.readFileSync(path, 'utf8'))
-      : []
-    json.push(illustId)
-    fs.writeFileSync(path, JSON.stringify(json))
+      : {
+          illust: [],
+          novel: [],
+        }
+
+    json[type].push(itemId)
+    fs.writeFileSync(path, JSON.stringify(json, null, 2))
   }
 }
