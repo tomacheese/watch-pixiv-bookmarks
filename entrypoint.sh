@@ -2,7 +2,7 @@
 
 while :
 do
-  node index.js || true
+  pnpm start || true
 
   # wait 5 minutes
   echo Waiting 5 minutes...
