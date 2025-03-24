@@ -242,6 +242,11 @@ async function processIllusts(
           value: formatDateTime(createDate),
           inline: true,
         },
+        {
+          name: 'Open with app',
+          value: `[Open](pixiv://illusts/${illustId})`,
+          inline: true,
+        },
       ],
       image: {
         url: 'attachment://image.png',
@@ -334,6 +339,11 @@ async function processNovels(pixiv: Pixiv, discord: Discord, isFirst: boolean) {
         {
           name: 'Created',
           value: formatDateTime(createDate),
+          inline: true,
+        },
+        {
+          name: 'Open with app',
+          value: `[Open](pixiv://novels/${novelId})`,
           inline: true,
         },
       ],
