@@ -244,7 +244,7 @@ async function processIllusts(
         },
         {
           name: 'Open with app',
-          value: `[Open](pixiv://illusts/${illustId})`,
+          value: `[Open](https://api.tomacheese.com/redirect/pixiv/illusts/${illustId})`,
           inline: true,
         },
       ],
@@ -343,7 +343,7 @@ async function processNovels(pixiv: Pixiv, discord: Discord, isFirst: boolean) {
         },
         {
           name: 'Open with app',
-          value: `[Open](pixiv://novels/${novelId})`,
+          value: `[Open](https://api.tomacheese.com/redirect/pixiv/novels/${novelId})`,
           inline: true,
         },
       ],
