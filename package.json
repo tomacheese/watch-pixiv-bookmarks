@@ -33,7 +33,7 @@
     "@book000/pixivts": "0.41.52",
     "@types/jest": "30.0.0",
     "@types/node": "22.18.2",
-    "axios": "1.11.0",
+    "axios": "1.12.1",
     "eslint": "9.35.0",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.32.0",
