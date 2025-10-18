@@ -28,13 +28,13 @@
     "test": "jest --runInBand --passWithNoTests --detectOpenHandles --forceExit"
   },
   "devDependencies": {
-    "@book000/eslint-config": "1.9.31",
+    "@book000/eslint-config": "1.11.4",
     "@book000/node-utils": "1.18.129",
-    "@book000/pixivts": "0.42.38",
+    "@book000/pixivts": "0.42.39",
     "@types/jest": "30.0.0",
-    "@types/node": "22.18.10",
+    "@types/node": "24.8.1",
     "axios": "1.12.2",
-    "eslint": "9.37.0",
+    "eslint": "9.38.0",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-n": "17.23.1",

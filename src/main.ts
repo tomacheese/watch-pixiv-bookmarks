@@ -114,8 +114,8 @@ async function getIllusts(pixiv: Pixiv, targetUserId: number) {
   }
 
   return [
-    ...bookmarkPublicIllusts.data.illusts.reverse(),
-    ...bookmarkPrivateIllusts.data.illusts.reverse(),
+    ...bookmarkPublicIllusts.data.illusts.toReversed(),
+    ...bookmarkPrivateIllusts.data.illusts.toReversed(),
   ]
 }
 
@@ -145,8 +145,8 @@ async function getNovels(pixiv: Pixiv, targetUserId: number) {
   }
 
   return [
-    ...bookmarkPublicNovels.data.novels.reverse(),
-    ...bookmarkPrivateNovels.data.novels.reverse(),
+    ...bookmarkPublicNovels.data.novels.toReversed(),
+    ...bookmarkPrivateNovels.data.novels.toReversed(),
   ]
 }
 function pad(n: number) {
