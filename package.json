@@ -28,7 +28,7 @@
     "test": "jest --runInBand --passWithNoTests --detectOpenHandles --forceExit"
   },
   "devDependencies": {
-    "@book000/eslint-config": "1.11.8",
+    "@book000/eslint-config": "1.11.9",
     "@book000/node-utils": "1.18.138",
     "@book000/pixivts": "0.42.48",
     "@types/jest": "30.0.0",
