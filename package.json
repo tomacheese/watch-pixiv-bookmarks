@@ -32,7 +32,7 @@
     "@book000/node-utils": "1.18.174",
     "@book000/pixivts": "0.44.9",
     "@types/jest": "30.0.0",
-    "@types/node": "24.10.1",
+    "@types/node": "24.10.2",
     "axios": "1.13.2",
     "eslint": "9.39.1",
     "eslint-config-standard": "17.1.0",
