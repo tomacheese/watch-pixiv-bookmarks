@@ -94,3 +94,4 @@ pnpm install
 6. PR 本文の崩れがないことを確認する。
 
 ## リポジトリ固有
+- 目的: Monitor pixiv bookmarks and notify Discord when new items are added.
