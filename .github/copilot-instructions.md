@@ -1,12 +1,10 @@
 # GitHub Copilot 指示書
 
-このドキュメントは、`watch-pixiv-bookmarks` プロジェクトにおける GitHub Copilot
-の利用に関する指示とガイドラインを定めています。
+このドキュメントは、`watch-pixiv-bookmarks` プロジェクトにおける GitHub Copilot の利用に関する指示とガイドラインを定めています。
 
 ## プロジェクト概要
 
-`watch-pixiv-bookmarks` は、pixiv のブックマークを監視し、新しいアイテムが追加されたときに Discord に通知を送信する
-TypeScript/Node.js アプリケーションです。
+`watch-pixiv-bookmarks` は、pixiv のブックマークを監視し、新しいアイテムが追加されたときに Discord に通知を送信する TypeScript/Node.js アプリケーションです。
 
 ### 技術スタック
 
@@ -51,7 +49,7 @@ TypeScript/Node.js アプリケーションです。
 
 ### 基本形式
 
-```text
+```
 <type>[optional scope]: <description>
 
 [optional body]
@@ -76,7 +74,6 @@ TypeScript/Node.js アプリケーションです。
 `<description>` は日本語で簡潔に記述してください。
 
 例：
-
 - `feat: Discord Webhook 対応を追加`
 - `fix: pixiv トークン読み込みエラーを修正`
 - `docs: README に環境変数の説明を追加`
@@ -87,7 +84,7 @@ TypeScript/Node.js アプリケーションです。
 
 ### 例
 
-```text
+```
 feat: Discord Webhook 対応を追加
 
 DISCORD_WEBHOOK_URL 環境変数が設定されている場合、
@@ -104,7 +101,6 @@ Webhook を使用して Discord に通知を送信する機能を追加。
 1. **見出しと本文の間には空白行を入れる**
 
    ✅ 正しい例：
-
    ```markdown
    ## 見出し
 
@@ -112,7 +108,6 @@ Webhook を使用して Discord に通知を送信する機能を追加。
    ```
 
    ❌ 間違った例：
-
    ```markdown
    ## 見出し
    本文がここに続きます。
@@ -121,13 +116,11 @@ Webhook を使用して Discord に通知を送信する機能を追加。
 2. **英数字と日本語の間には半角スペースを入れる**
 
    ✅ 正しい例：
-
    - `TypeScript ファイルを作成`
    - `Node.js バージョン 18 以上が必要`
    - `API レスポンスの JSON 形式`
 
    ❌ 間違った例：
-
    - `TypeScriptファイルを作成`
    - `Node.jsバージョン18以上が必要`
    - `APIレスポンスのJSON形式`
