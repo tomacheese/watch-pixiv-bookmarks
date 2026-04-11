@@ -15,8 +15,8 @@ importers:
         specifier: 1.24.123
         version: 1.24.123
       '@book000/pixivts':
-        specifier: 0.46.48
-        version: 0.46.48(@types/node@24.12.2)(typescript@5.9.3)
+        specifier: 0.46.52
+        version: 0.46.52(@types/node@24.12.2)(typescript@5.9.3)
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
@@ -238,8 +238,8 @@ packages:
   '@book000/node-utils@1.24.123':
     resolution: {integrity: sha512-IefkdEUR7Vs907qap+TJmhY1b6ZbxAJPRJvqk+xq3qtJ+K5hS2UKxhzrGXLD4WUjfZbgMXN/ttx76ylHrqtGUg==}
 
-  '@book000/pixivts@0.46.48':
-    resolution: {integrity: sha512-uB98ABtWIz/sIzCdqPXuMr2N8bcZxrY32URNOa9O6zp+AqYTlhr6loBqHY2eg2qmKmvvdYOFX/k+mFFA+Id2Kw==}
+  '@book000/pixivts@0.46.52':
+    resolution: {integrity: sha512-sWjNe5KfH7sthxoLu2OHJigsHfgYdfp12sCc6THAIptR9aPjySyZsyBdF1PDLPnaA+QnJjq0nOsfFnOn19gaxQ==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -2397,8 +2397,8 @@ packages:
   pure-rand@7.0.1:
     resolution: {integrity: sha512-oTUZM/NAZS8p7ANR3SHh30kXB+zK2r2BPcEn/awJIbOvq82WoMN4p62AWWp3Hhw50G0xMsw1mhIBLqHw64EcNQ==}
 
-  qs@6.15.0:
-    resolution: {integrity: sha512-mAZTtNCeetKMH+pSjrb76NAM8V9a05I9aBZOHztWy/UqcJdQYNsf59vrRKWnojAT9Y+GbIvoTBC++CPHqpDBhQ==}
+  qs@6.15.1:
+    resolution: {integrity: sha512-6YHEFRL9mfgcAvql/XhwTvf5jKcOiiupt2FiJxHkiX1z4j7WL8J/jRHYLluORvc1XxB5rV20KoeK00gVJamspg==}
     engines: {node: '>=0.6'}
 
   react-is@16.13.1:
@@ -3187,12 +3187,12 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@book000/pixivts@0.46.48(@types/node@24.12.2)(typescript@5.9.3)':
+  '@book000/pixivts@0.46.52(@types/node@24.12.2)(typescript@5.9.3)':
     dependencies:
       '@types/qs': 6.15.0
-      axios: 1.14.0
+      axios: 1.15.0
       mysql2: 3.20.0(@types/node@24.12.2)
-      qs: 6.15.0
+      qs: 6.15.1
       snake-camel-types: 1.0.1(typescript@5.9.3)
       typeorm: 0.3.28(mysql2@3.20.0(@types/node@24.12.2))
       typeorm-naming-strategies: 4.1.0(typeorm@0.3.28(mysql2@3.20.0(@types/node@24.12.2)))
@@ -5764,7 +5764,7 @@ snapshots:
 
   pure-rand@7.0.1: {}
 
-  qs@6.15.0:
+  qs@6.15.1:
     dependencies:
       side-channel: 1.1.0
 
