@@ -3,7 +3,6 @@ import { Discord, DiscordEmbed, Logger } from '@book000/node-utils'
 import { BookmarkRestrict, Pixiv } from '@book000/pixivts'
 import { Notified } from './notified'
 
-
 function isJSON(value: string): boolean {
   try {
     JSON.parse(value)
@@ -82,9 +81,9 @@ async function getImageArrayBuffer(url: string): Promise<ArrayBuffer> {
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
       Referer: 'https://www.pixiv.net/',
     },
-  });
-  if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-  const data = await res.arrayBuffer();
+  })
+  if (!res.ok) throw new Error(`HTTP error: ${res.status}`)
+  const data = await res.arrayBuffer()
   return data
 }
 
