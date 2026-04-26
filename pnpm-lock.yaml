@@ -12,8 +12,8 @@ importers:
         specifier: 1.14.17
         version: 1.14.17(eslint@10.2.1)(typescript@5.9.3)
       '@book000/node-utils':
-        specifier: 1.24.123
-        version: 1.24.123
+        specifier: 1.24.142
+        version: 1.24.142
       '@book000/pixivts':
         specifier: 0.46.48
         version: 0.46.48(@types/node@24.12.2)(typescript@5.9.3)
@@ -232,8 +232,8 @@ packages:
     peerDependencies:
       eslint: 10.2.1
 
-  '@book000/node-utils@1.24.123':
-    resolution: {integrity: sha512-IefkdEUR7Vs907qap+TJmhY1b6ZbxAJPRJvqk+xq3qtJ+K5hS2UKxhzrGXLD4WUjfZbgMXN/ttx76ylHrqtGUg==}
+  '@book000/node-utils@1.24.142':
+    resolution: {integrity: sha512-CYJAcIq3JFPD4MYc9JU3bDLwyD5+yK8nMFKsXyvF0KKAJAg/t/rRSIOmecdrITyaZzVef8lqToXKq7+2VfaQFQ==}
 
   '@book000/pixivts@0.46.48':
     resolution: {integrity: sha512-uB98ABtWIz/sIzCdqPXuMr2N8bcZxrY32URNOa9O6zp+AqYTlhr6loBqHY2eg2qmKmvvdYOFX/k+mFFA+Id2Kw==}
@@ -3136,17 +3136,13 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.24.123':
+  '@book000/node-utils@1.24.142':
     dependencies:
-      axios: 1.14.0
       cycle: 1.0.3
-      form-data: 4.0.5
       jsonc-parser: 3.3.1
       moment-timezone: 0.6.1
       winston: 3.19.0
       winston-daily-rotate-file: 5.0.0(winston@3.19.0)
-    transitivePeerDependencies:
-      - debug
 
   '@book000/pixivts@0.46.48(@types/node@24.12.2)(typescript@5.9.3)':
     dependencies:
