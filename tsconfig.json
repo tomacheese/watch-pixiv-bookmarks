@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "commonjs",
-    "moduleResolution": "Node",
-    "lib": ["ESNext", "esnext.AsyncIterable"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
     "outDir": "./dist",
+    "rootDir": "./src",
     "removeComments": true,
     "esModuleInterop": true,
     "allowJs": true,
@@ -22,10 +23,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
+    "isolatedModules": true,
     "newLine": "LF",
+    "types": ["node", "jest"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"]
