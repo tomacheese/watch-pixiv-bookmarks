@@ -30,7 +30,7 @@
   "devDependencies": {
     "@book000/eslint-config": "1.14.53",
     "@book000/node-utils": "1.24.216",
-    "@book000/pixivts": "0.48.85",
+    "@book000/pixivts": "0.48.86",
     "@types/jest": "30.0.0",
     "@types/node": "24.13.0",
     "eslint": "10.4.1",
