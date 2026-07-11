@@ -1,62 +1,33 @@
-# GitHub Copilot Instructions
+# GitHub Copilot code review instructions
 
-## プロジェクト概要
-- 目的: pixiv のブックマークを監視し、新規ブックマークを Discord に通知する
-- 主な機能: ブックマーク（イラスト・小説）の取得、新規ブックマークの判定、Discord への詳細な通知（画像付き）
-- 対象ユーザー: 開発者（個人利用）
+pixiv のブックマークを監視し、新規分を Discord に通知する TypeScript (Node.js / tsx / pnpm) プロジェクト。以下はコードレビュー時の重点確認事項。
 
-## 共通ルール
-- 会話は日本語で行う。
-- PR とコミットは Conventional Commits に従う。
+## レビュー時の言語
+
+- レビューコメントは日本語で記載する。
 - 日本語と英数字の間には半角スペースを入れる。
 
-## 技術スタック
-- 言語: TypeScript
-- 実行環境: Node.js (tsx)
-- パッケージマネージャー: pnpm
-- 主要ライブラリ:
-  - `@book000/pixivts`: pixiv API クライアント
-  - `@book000/node-utils`: Logger, Discord 通知ユーティリティ
-  - `axios`: 画像バイナリ取得用
+## 重点的に確認する点
 
-## コーディング規約
-- フォーマット: Prettier
-- Lint: ESLint
-- 命名規則: キャメルケース (変数・関数)、パスカルケース (クラス・インターフェース)
-- docstring: 関数やインターフェースには JSDoc 形式で日本語の解説を記載する
+- 認証情報の漏洩: pixiv のリフレッシュトークン・アクセストークンや `data/token.json`、Discord トークンをログ出力・コミット・エラーメッセージに含めていないか。
+- エラーハンドリング: pixiv API 呼び出し（`userBookmarksIllust` / `userBookmarksNovel` 等）は `status !== 200` を確認しているか。`fetch` の失敗（`res.ok` が false）を握り潰していないか。
+- 通知の冪等性: `Notified.isNotified` / `Notified.addNotified` を通し、通知済みアイテムを重複通知しないこと。初回起動（`isFirst`）時は通知を送らず既読登録のみ行う既存挙動を壊さないこと。
+- 型安全性: `skipLibCheck: true` による型チェック回避を追加していないか。`tsc`（`pnpm lint` に含まれる）が通ること。
+- レート対策: Discord への連続送信間に存在する待機（`setTimeout` 1 秒）を削除していないか。
 
-## 開発コマンド
-```bash
-# 依存関係のインストール
-pnpm install
+## コーディング規約（lint / formatter で強制）
 
-# 開発実行 (watch モード)
-pnpm dev
+- Prettier: セミコロンなし (`semi: false`)、シングルクォート、`printWidth: 80`、末尾カンマ es5、アロー関数の括弧は常時。手動整形で規約に反していないか。
+- ESLint: `@book000/eslint-config` に準拠。
+- 命名: 変数・関数はキャメルケース、クラス・インターフェースはパスカルケース。
+- 関数・インターフェースには日本語の JSDoc を付与する方針。
 
-# 通常実行
-pnpm start
+## フラグ不要（誤検知しやすい既知パターン）
 
-# テスト実行
-pnpm test
+- HTTP クライアントに axios ではなく標準 `fetch` を使用しているのは意図的。axios への置き換えを提案しない。
+- 通知済み管理は DB ではなく `data/notified.json` の単純な JSON。設計上の選択であり、DB 化を提案しない。
+- テストファイルが存在しないため CI のテストは `--passWithNoTests` で通過する。これ自体は既知の状態。
 
-# Lint 実行
-pnpm lint
+## テスト
 
-# 自動修正実行
-pnpm fix
-```
-
-## テスト方針
-- フレームワーク: Jest
-- テスト追加の方針: ロジックの変更や新規機能追加時には `**/*.test.ts` としてテストを作成する
-
-## セキュリティ / 機密情報
-- `data/token.json` や環境変数に含まれる認証情報をコミットしない。
-- ログにアクセストークンなどの機密情報を出力しない。
-
-## ドキュメント更新
-- `README.md` の設定方法や使用方法に変更がある場合は更新する。
-
-## リポジトリ固有
-- 実行には pixiv のリフレッシュトークンが必要であり、`data/token.json` に保存・更新される。
-- 通知済みリストは `data/notified.json` で管理される。
+- フレームワークは Jest（`ts-jest`、`**/*.test.ts`）。ロジック変更時はテスト追加が望ましい。
