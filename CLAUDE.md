@@ -23,18 +23,16 @@
 
 ## 環境のルール
 - ブランチ命名: Conventional Branch (`feat/description`, `fix/description`) に従う。
-- リポジトリ調査: `search_file_content` や `ls -R` を活用して構造を理解する。
 - Renovate: Renovate が作成した PR に対しては追加コミットを行わない。
 
 ## コード改修時のルール
-- エラーメッセージの絵文字: 既存のメッセージに合わせて適切な絵文字を先頭に付与する。
+- エラーメッセージの絵文字: 既存のメッセージに合わせて適切な絵文字を先頭に付与する（例: `🚨` エラー、`📸` イラスト、`📚` 小説）。
 - TypeScript: `skipLibCheck: true` による型チェック回避は禁止。
 - docstring: 関数・インターフェースに日本語で JSDoc を記載する。
 
-## 相談ルール
-- Codex CLI: 実装レビュー、局所設計、整合性確認に使用する。
-- Gemini CLI: 外部仕様、最新情報確認に使用する。
-- 指摘への対応: 指摘事項は無視せず、適切に対応または理由を説明する。
+## セキュリティ / 機密情報
+- `data/` 配下のファイル（`data/token.json` 等）や環境変数に含まれる認証情報をコミットに含めない。
+- ログ出力に pixiv のリフレッシュトークンやアクセストークン等の認証情報を含めない。
 
 ## 開発コマンド
 ```bash
@@ -61,8 +59,10 @@ pnpm fix
 - `data/`: トークンや通知済みリストの保存先（.gitignore 指定）
 
 ## テスト
-- テストフレームワーク: Jest
-- 方針: 重要なロジック（通知判定など）に対してテストを作成する。
+- テストフレームワーク: Jest（`ts-jest`、テストは `**/*.test.ts`）。
+- 現状テストファイルは存在せず、`pnpm test` は `--passWithNoTests` で通過する。
+- 方針: 重要なロジック（通知判定など）を変更・追加する際はテストを作成する。
+- 手動確認: `data/token.json` と Discord 通知先を設定した上で `pnpm start` を実行し、通知動作を確認する。
 
 ## 作業チェックリスト
 
@@ -83,8 +83,11 @@ pnpm fix
 
 ### PR 作成後
 1. `gh pr checks` で CI の成功を確認する
-2. GitHub Copilot / Codex のレビューに対応する
+2. GitHub Copilot のレビューに対応する
 
 ## リポジトリ固有
 - `@book000/pixivts` を使用して pixiv API と通信している。
-- 通知済み管理は単純な JSON ファイルで行われている。
+- `@book000/node-utils` の `Logger` と `Discord` クラスを標準的に使用する。
+- 画像バイナリの取得は標準の `fetch` で行う（axios 等の HTTP クライアントは使用していない）。
+- 通知済み管理は `data/notified.json`（`Notified` クラス）で単純な JSON として行われている。
+- 定期実行は `entrypoint.sh` が `pnpm start` を 5 分間隔でループする方式（Docker 前提）。
