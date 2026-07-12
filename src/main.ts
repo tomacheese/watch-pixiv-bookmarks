@@ -14,13 +14,7 @@ function isJSON(value: string): boolean {
 
 function isValidTokenJSON(data: object): data is { refresh_token: string } {
   try {
-    if (typeof data !== 'object') {
-      return false
-    }
-    if ('refresh_token' in data) {
-      return true
-    }
-    return false
+    return typeof data === 'object' && 'refresh_token' in data
   } catch {
     return false
   }
@@ -194,11 +188,11 @@ async function processIllusts(
       totalView,
       imageUrls: { large: imageUrl },
       tags: tagLists,
-      createDate: createDateRaw,
+      createDate: createdDateRaw,
     } = illust
 
     const caption = captionRaw.replaceAll(/<("[^"]*"|'[^']*'|[^"'>])*>/g, '')
-    const createDate = new Date(createDateRaw)
+    const createdDate = new Date(createdDateRaw)
     const tags = tagLists.map((tag) => tag.name)
 
     console.log(`[Illust] ${title} ${illustId}`)
@@ -231,7 +225,7 @@ async function processIllusts(
         },
         {
           name: 'Created',
-          value: formatDateTime(createDate),
+          value: formatDateTime(createdDate),
           inline: true,
         },
         {
@@ -297,11 +291,11 @@ async function processNovels(
       tags: tagLists,
       totalBookmarks,
       totalView,
-      createDate: createDateRaw,
+      createDate: createdDateRaw,
     } = novel
 
     const caption = captionRaw.replaceAll(/<("[^"]*"|'[^']*'|[^"'>])*>/g, '')
-    const createDate = new Date(createDateRaw)
+    const createdDate = new Date(createdDateRaw)
     const tags = tagLists.map((tag) => tag.name)
 
     console.log(`[Novel] ${title} ${novelId}`)
@@ -334,7 +328,7 @@ async function processNovels(
         },
         {
           name: 'Created',
-          value: formatDateTime(createDate),
+          value: formatDateTime(createdDate),
           inline: true,
         },
         {
