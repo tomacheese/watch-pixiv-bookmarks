@@ -17,10 +17,7 @@ function isValidTokenJSON(data: object): data is { refresh_token: string } {
     if (typeof data !== 'object') {
       return false
     }
-    if ('refresh_token' in data) {
-      return true
-    }
-    return false
+    return 'refresh_token' in data
   } catch {
     return false
   }
@@ -75,15 +72,15 @@ async function getPixiv() {
 }
 
 async function getImageArrayBuffer(url: string): Promise<ArrayBuffer> {
-  const res = await fetch(url, {
+  const response = await fetch(url, {
     headers: {
       'User-Agent':
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
       Referer: 'https://www.pixiv.net/',
     },
   })
-  if (!res.ok) throw new Error(`HTTP error: ${res.status}`)
-  const data = await res.arrayBuffer()
+  if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
+  const data = await response.arrayBuffer()
   return data
 }
 
@@ -201,11 +198,11 @@ async function processIllusts(
       total_view: totalView,
       image_urls: { large: imageUrl },
       tags: tagLists,
-      create_date: createDateRaw,
+      create_date: createdDateRaw,
     } = illust
 
     const caption = captionRaw.replaceAll(/<("[^"]*"|'[^']*'|[^"'>])*>/g, '')
-    const createDate = new Date(createDateRaw)
+    const createdDate = new Date(createdDateRaw)
     const tags = tagLists.map((tag) => tag.name)
 
     console.log(`[Illust] ${title} ${illustId}`)
@@ -238,7 +235,7 @@ async function processIllusts(
         },
         {
           name: 'Created',
-          value: formatDateTime(createDate),
+          value: formatDateTime(createdDate),
           inline: true,
         },
         {
@@ -300,11 +297,11 @@ async function processNovels(pixiv: Pixiv, discord: Discord, isFirst: boolean) {
       tags: tagLists,
       total_bookmarks: totalBookmarks,
       total_view: totalView,
-      create_date: createDateRaw,
+      create_date: createdDateRaw,
     } = novel
 
     const caption = captionRaw.replaceAll(/<("[^"]*"|'[^']*'|[^"'>])*>/g, '')
-    const createDate = new Date(createDateRaw)
+    const createdDate = new Date(createdDateRaw)
     const tags = tagLists.map((tag) => tag.name)
 
     console.log(`[Novel] ${title} ${novelId}`)
@@ -337,7 +334,7 @@ async function processNovels(pixiv: Pixiv, discord: Discord, isFirst: boolean) {
         },
         {
           name: 'Created',
-          value: formatDateTime(createDate),
+          value: formatDateTime(createdDate),
           inline: true,
         },
         {
