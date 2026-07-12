@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import { Discord, DiscordEmbed, Logger } from '@book000/node-utils'
-import { BookmarkRestrict, Pixiv } from '@book000/pixivts'
+import { BookmarkRestrict, PixivClient } from '@book000/pixivts'
 import { Notified } from './notified'
 
 function isJSON(value: string): boolean {
@@ -51,23 +51,16 @@ async function getPixiv() {
     return
   }
 
-  const isEnabledResponseSave = !!process.env.RESPONSE_DB_HOSTNAME
-  const pixiv = await Pixiv.of(inputRefreshToken, {
-    debugOptions: {
-      outputResponse: {
-        enable: isEnabledResponseSave,
-      },
-    },
-  })
+  const pixiv = await PixivClient.of(inputRefreshToken)
 
   fs.writeFileSync(
     tokenPath,
     JSON.stringify({
-      access_token: pixiv.accessToken,
+      access_token: pixiv.getAccessToken(),
       user: {
         id: pixiv.userId,
       },
-      refresh_token: pixiv.refreshToken,
+      refresh_token: pixiv.getRefreshToken(),
     })
   )
 
@@ -87,65 +80,65 @@ async function getImageArrayBuffer(url: string): Promise<ArrayBuffer> {
   return data
 }
 
-async function getIllusts(pixiv: Pixiv, targetUserId: number) {
+async function getIllusts(pixiv: PixivClient, targetUserId: number) {
   const logger = Logger.configure('getIllusts')
 
-  const bookmarkPublicIllusts = await pixiv.userBookmarksIllust({
+  const bookmarkPublicIllusts = await pixiv.users.bookmarks.illusts({
     userId: targetUserId,
     restrict: BookmarkRestrict.PUBLIC,
   })
-  if (bookmarkPublicIllusts.status !== 200) {
+  if (bookmarkPublicIllusts.isErr) {
     logger.error(
-      `🚨 Failed to get illust private bookmarks: ${bookmarkPublicIllusts.status} ${JSON.stringify(bookmarkPublicIllusts.data)}`
+      `🚨 Failed to get illust private bookmarks: ${JSON.stringify(bookmarkPublicIllusts.error)}`
     )
     return
   }
 
-  const bookmarkPrivateIllusts = await pixiv.userBookmarksIllust({
+  const bookmarkPrivateIllusts = await pixiv.users.bookmarks.illusts({
     userId: targetUserId,
     restrict: BookmarkRestrict.PRIVATE,
   })
-  if (bookmarkPrivateIllusts.status !== 200) {
+  if (bookmarkPrivateIllusts.isErr) {
     logger.error(
-      `🚨 Failed to get illust private bookmarks: ${bookmarkPrivateIllusts.status} ${JSON.stringify(bookmarkPrivateIllusts.data)}`
+      `🚨 Failed to get illust private bookmarks: ${JSON.stringify(bookmarkPrivateIllusts.error)}`
     )
     return
   }
 
   return [
-    ...bookmarkPublicIllusts.data.illusts.toReversed(),
-    ...bookmarkPrivateIllusts.data.illusts.toReversed(),
+    ...bookmarkPublicIllusts.value.illusts.toReversed(),
+    ...bookmarkPrivateIllusts.value.illusts.toReversed(),
   ]
 }
 
-async function getNovels(pixiv: Pixiv, targetUserId: number) {
+async function getNovels(pixiv: PixivClient, targetUserId: number) {
   const logger = Logger.configure('getNovels')
 
-  const bookmarkPublicNovels = await pixiv.userBookmarksNovel({
+  const bookmarkPublicNovels = await pixiv.users.bookmarks.novels({
     userId: targetUserId,
     restrict: BookmarkRestrict.PUBLIC,
   })
-  if (bookmarkPublicNovels.status !== 200) {
+  if (bookmarkPublicNovels.isErr) {
     logger.error(
-      `🚨 Failed to get novel public bookmarks: ${bookmarkPublicNovels.status} ${JSON.stringify(bookmarkPublicNovels.data)}`
+      `🚨 Failed to get novel public bookmarks: ${JSON.stringify(bookmarkPublicNovels.error)}`
     )
     return
   }
 
-  const bookmarkPrivateNovels = await pixiv.userBookmarksNovel({
+  const bookmarkPrivateNovels = await pixiv.users.bookmarks.novels({
     userId: targetUserId,
     restrict: BookmarkRestrict.PRIVATE,
   })
-  if (bookmarkPrivateNovels.status !== 200) {
+  if (bookmarkPrivateNovels.isErr) {
     logger.error(
-      `🚨 Failed to get novel private bookmarks: ${bookmarkPrivateNovels.status} ${JSON.stringify(bookmarkPrivateNovels.data)}`
+      `🚨 Failed to get novel private bookmarks: ${JSON.stringify(bookmarkPrivateNovels.error)}`
     )
     return
   }
 
   return [
-    ...bookmarkPublicNovels.data.novels.toReversed(),
-    ...bookmarkPrivateNovels.data.novels.toReversed(),
+    ...bookmarkPublicNovels.value.novels.toReversed(),
+    ...bookmarkPrivateNovels.value.novels.toReversed(),
   ]
 }
 function pad(n: number) {
@@ -166,7 +159,7 @@ function formatDateTime(date: Date) {
 }
 
 async function processIllusts(
-  pixiv: Pixiv,
+  pixiv: PixivClient,
   discord: Discord,
   isFirst: boolean
 ) {
@@ -197,11 +190,11 @@ async function processIllusts(
       title,
       caption: captionRaw,
       user: { name: username, id: userId },
-      total_bookmarks: totalBookmarks,
-      total_view: totalView,
-      image_urls: { large: imageUrl },
+      totalBookmarks,
+      totalView,
+      imageUrls: { large: imageUrl },
       tags: tagLists,
-      create_date: createDateRaw,
+      createDate: createDateRaw,
     } = illust
 
     const caption = captionRaw.replaceAll(/<("[^"]*"|'[^']*'|[^"'>])*>/g, '')
@@ -269,7 +262,11 @@ async function processIllusts(
   }
 }
 
-async function processNovels(pixiv: Pixiv, discord: Discord, isFirst: boolean) {
+async function processNovels(
+  pixiv: PixivClient,
+  discord: Discord,
+  isFirst: boolean
+) {
   const logger = Logger.configure('processNovels')
 
   const targetUserId = Number(process.env.PIXIV_USER_ID)
@@ -298,9 +295,9 @@ async function processNovels(pixiv: Pixiv, discord: Discord, isFirst: boolean) {
       caption: captionRaw,
       user: { name: username, id: userId },
       tags: tagLists,
-      total_bookmarks: totalBookmarks,
-      total_view: totalView,
-      create_date: createDateRaw,
+      totalBookmarks,
+      totalView,
+      createDate: createDateRaw,
     } = novel
 
     const caption = captionRaw.replaceAll(/<("[^"]*"|'[^']*'|[^"'>])*>/g, '')
@@ -389,12 +386,8 @@ async function main() {
     return
   }
 
-  try {
-    await processIllusts(pixiv, discord, isFirst)
-    await processNovels(pixiv, discord, isFirst)
-  } finally {
-    await pixiv.close()
-  }
+  await processIllusts(pixiv, discord, isFirst)
+  await processNovels(pixiv, discord, isFirst)
 }
 
 ;(async () => {
