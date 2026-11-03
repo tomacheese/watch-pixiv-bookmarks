@@ -20,6 +20,9 @@ function isValidTokenJSON(data: object): data is { refresh_token: string } {
   }
 }
 
+/** refresh token の恒久的な失敗を示す終了コード (entrypoint.sh と揃える) */
+const PERMANENT_AUTH_FAILURE_EXIT_CODE = 10
+
 async function getPixiv() {
   const logger = Logger.configure('getPixiv')
   const tokenPath = process.env.PIXIV_TOKEN_PATH ?? 'data/token.json'
@@ -45,7 +48,19 @@ async function getPixiv() {
     return
   }
 
-  const pixiv = await PixivClient.of(inputRefreshToken)
+  let pixiv: PixivClient
+  try {
+    pixiv = await PixivClient.of(inputRefreshToken)
+  } catch (error) {
+    // 400/401 は refresh token の失効など恒久的な失敗とみなす。それ以外は従来通り再スローする
+    if (!(error instanceof Error) || !/HTTP (400|401)$/.test(error.message)) {
+      throw error
+    }
+    logger.error('🚨 Failed to refresh pixiv token (permanent failure)', error)
+    // entrypoint.sh がこの終了コードを見てリトライ間隔を延ばす
+    process.exitCode = PERMANENT_AUTH_FAILURE_EXIT_CODE
+    return
+  }
 
   fs.writeFileSync(
     tokenPath,
