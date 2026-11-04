@@ -1,6 +1,8 @@
 # watch-pixiv-bookmarks
 
-Monitor pixiv bookmarks and notify Discord when new items are added.
+Monitor pixiv bookmarks (illustrations and novels, public and private) and notify Discord when new items are added.
+
+On the first run, existing bookmarks are only recorded as already notified, and no notifications are sent. The app checks for new bookmarks every 5 minutes.
 
 ## Installation
 
@@ -32,7 +34,8 @@ services:
 
 Retrieve the refresh token by referring to [Retrieving Auth Token (with Selenium)](https://gist.github.com/upbit/6edda27cb1644e94183291109b8a5fde), etc.  
 Then, write the refresh token (`<REFRESH-TOKEN>`) in `data/token.json` in the following format.  
-If the environment variable `PIXIV_TOKEN_PATH` is set, the specified value is taken as the path to the configuration file.
+The app rewrites this file on every run with the refreshed tokens, so it must be writable.  
+Outside Docker, the path can be changed with the `PIXIV_TOKEN_PATH` environment variable (default `data/token.json`).
 
 ```json
 {
@@ -40,10 +43,10 @@ If the environment variable `PIXIV_TOKEN_PATH` is set, the specified value is ta
 }
 ```
 
-### 3. Build and Run
+### 3. Run
 
 ```shell
-docker compose up --build -d
+docker compose up -d
 ```
 
 ## Disclaimer

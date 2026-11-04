@@ -20,7 +20,7 @@ function isValidTokenJSON(data: object): data is { refresh_token: string } {
   }
 }
 
-/** refresh token の恒久的な失敗を示す終了コード (entrypoint.sh と揃える) */
+/** Exit code signalling a permanent token failure. Must match entrypoint.sh. */
 const PERMANENT_AUTH_FAILURE_EXIT_CODE = 10
 
 async function getPixiv() {
@@ -52,12 +52,12 @@ async function getPixiv() {
   try {
     pixiv = await PixivClient.of(inputRefreshToken)
   } catch (error) {
-    // 400/401 は refresh token の失効など恒久的な失敗とみなす。それ以外は従来通り再スローする
+    // An expired refresh token returns HTTP 400/401: permanent failure; anything else is rethrown
     if (!(error instanceof Error) || !/HTTP (400|401)$/.test(error.message)) {
       throw error
     }
     logger.error('🚨 Failed to refresh pixiv token (permanent failure)', error)
-    // entrypoint.sh がこの終了コードを見てリトライ間隔を延ばす
+    // entrypoint.sh backs off its retry interval on this exit code
     process.exitCode = PERMANENT_AUTH_FAILURE_EXIT_CODE
     return
   }
@@ -155,7 +155,6 @@ function pad(n: number) {
 }
 
 function formatDateTime(date: Date) {
-  // 0埋めして YYYY-MM-DD HH:mm:ss にする
   return (
     [date.getFullYear(), pad(date.getMonth() + 1), pad(date.getDate())].join(
       '-'
