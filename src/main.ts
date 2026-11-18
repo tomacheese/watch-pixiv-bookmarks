@@ -166,11 +166,7 @@ function formatDateTime(date: Date) {
   )
 }
 
-async function processIllusts(
-  pixiv: PixivClient,
-  discord: Discord,
-  isFirst: boolean
-) {
+async function processIllusts(pixiv: PixivClient, discord: Discord) {
   const logger = Logger.configure('processIllusts')
 
   const targetUserId = Number(process.env.PIXIV_USER_ID)
@@ -183,6 +179,8 @@ async function processIllusts(
   if (!illusts) {
     return
   }
+
+  const isFirst = Notified.isFirst('illust')
 
   const filteredBookmarkIllusts = illusts
     .filter((previous, index, self) => {
@@ -268,13 +266,13 @@ async function processIllusts(
 
     Notified.addNotified('illust', illustId)
   }
+
+  if (isFirst) {
+    Notified.markInitialized('illust')
+  }
 }
 
-async function processNovels(
-  pixiv: PixivClient,
-  discord: Discord,
-  isFirst: boolean
-) {
+async function processNovels(pixiv: PixivClient, discord: Discord) {
   const logger = Logger.configure('processNovels')
 
   const targetUserId = Number(process.env.PIXIV_USER_ID)
@@ -287,6 +285,8 @@ async function processNovels(
   if (!novels) {
     return
   }
+
+  const isFirst = Notified.isFirst('novel')
 
   const filteredBookmarkNovels = novels
     .filter((previous, index, self) => {
@@ -362,12 +362,15 @@ async function processNovels(
 
     Notified.addNotified('novel', novelId)
   }
+
+  if (isFirst) {
+    Notified.markInitialized('novel')
+  }
 }
 
 async function main() {
   const logger = Logger.configure('main')
 
-  const isFirst = Notified.isFirst()
   const pixiv = await getPixiv()
   if (!pixiv) {
     return
@@ -394,8 +397,8 @@ async function main() {
     return
   }
 
-  await processIllusts(pixiv, discord, isFirst)
-  await processNovels(pixiv, discord, isFirst)
+  await processIllusts(pixiv, discord)
+  await processNovels(pixiv, discord)
 }
 
 ;(async () => {
