@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import { Discord, DiscordEmbed, Logger } from '@book000/node-utils'
-import { BookmarkRestrict, PixivClient } from '@book000/pixivts'
+import { PixivClient } from '@book000/pixivts'
+import { getIllusts, getNovels } from './bookmarks'
 import { Notified } from './notified'
 
 function isJSON(value: string): boolean {
@@ -90,59 +91,6 @@ async function getImageArrayBuffer(url: string): Promise<ArrayBuffer> {
   return data
 }
 
-async function getIllusts(pixiv: PixivClient, targetUserId: number) {
-  const bookmarkPublicIllusts = await pixiv.users.bookmarks.illusts({
-    userId: targetUserId,
-    restrict: BookmarkRestrict.PUBLIC,
-  })
-  if (bookmarkPublicIllusts.isErr) {
-    throw new Error(
-      `Failed to get illust private bookmarks: ${JSON.stringify(bookmarkPublicIllusts.error)}`
-    )
-  }
-
-  const bookmarkPrivateIllusts = await pixiv.users.bookmarks.illusts({
-    userId: targetUserId,
-    restrict: BookmarkRestrict.PRIVATE,
-  })
-  if (bookmarkPrivateIllusts.isErr) {
-    throw new Error(
-      `Failed to get illust private bookmarks: ${JSON.stringify(bookmarkPrivateIllusts.error)}`
-    )
-  }
-
-  return [
-    ...bookmarkPublicIllusts.value.illusts.toReversed(),
-    ...bookmarkPrivateIllusts.value.illusts.toReversed(),
-  ]
-}
-
-async function getNovels(pixiv: PixivClient, targetUserId: number) {
-  const bookmarkPublicNovels = await pixiv.users.bookmarks.novels({
-    userId: targetUserId,
-    restrict: BookmarkRestrict.PUBLIC,
-  })
-  if (bookmarkPublicNovels.isErr) {
-    throw new Error(
-      `Failed to get novel public bookmarks: ${JSON.stringify(bookmarkPublicNovels.error)}`
-    )
-  }
-
-  const bookmarkPrivateNovels = await pixiv.users.bookmarks.novels({
-    userId: targetUserId,
-    restrict: BookmarkRestrict.PRIVATE,
-  })
-  if (bookmarkPrivateNovels.isErr) {
-    throw new Error(
-      `Failed to get novel private bookmarks: ${JSON.stringify(bookmarkPrivateNovels.error)}`
-    )
-  }
-
-  return [
-    ...bookmarkPublicNovels.value.novels.toReversed(),
-    ...bookmarkPrivateNovels.value.novels.toReversed(),
-  ]
-}
 function pad(n: number) {
   return n.toString().padStart(2, '0')
 }
