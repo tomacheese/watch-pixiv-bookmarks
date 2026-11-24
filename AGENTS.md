@@ -28,8 +28,8 @@ There is no build step; the Docker image runs the TypeScript sources directly.
 - `src/main.ts`: fetches bookmarks through `@book000/pixivts`, builds Discord embeds and sends them with `@book000/node-utils` (`Logger`, `Discord`). Images are downloaded with the standard `fetch` (no axios).
 - `src/notified.ts`: `Notified` class that persists notified item IDs as plain JSON (`data/notified.json`, or `NOTIFIED_FILE`).
 - `entrypoint.sh`: Docker entrypoint that runs `pnpm start` in a loop. It waits 5 minutes between runs; on exit code 10 (permanent pixiv token refresh failure, HTTP 400/401) it doubles the wait up to 1 hour. The exit code is defined in `src/main.ts` and must stay in sync.
-- `data/`: token file (`PIXIV_TOKEN_PATH`, default `data/token.json`) and notified list. Git-ignored.
-- Environment variables: `PIXIV_USER_ID`, `DISCORD_TOKEN` + `DISCORD_CHANNEL_ID` or `DISCORD_WEBHOOK_URL`, `PIXIV_TOKEN_PATH`, `NOTIFIED_FILE`.
+- `data/`: token file and notified list. Git-ignored. The token file path defaults to `/data/token.json` in Docker and `data/token.json` outside Docker. `PIXIV_AUTH_FILE` configures the path; the legacy `PIXIV_TOKEN_PATH` takes precedence when both are set.
+- Environment variables: `PIXIV_USER_ID`, `DISCORD_TOKEN` + `DISCORD_CHANNEL_ID` or `DISCORD_WEBHOOK_URL`, `PIXIV_AUTH_FILE`, `PIXIV_TOKEN_PATH` (legacy), `NOTIFIED_FILE`.
 
 ## Conventions
 

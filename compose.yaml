@@ -5,5 +5,7 @@ services:
       - type: bind
         source: ./data
         target: /data
+    environment:
+      PIXIV_AUTH_FILE: /data/token.json
     init: true
     restart: always

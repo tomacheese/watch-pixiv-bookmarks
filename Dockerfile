@@ -26,7 +26,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 ENV NODE_ENV=production
 ENV NOTIFIED_FILE=/data/notified.json
-ENV PIXIV_TOKEN_PATH=/data/token.json
+ENV PIXIV_AUTH_FILE=/data/token.json
 
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh

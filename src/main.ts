@@ -30,7 +30,10 @@ const PERMANENT_AUTH_FAILURE_EXIT_CODE = 10
  */
 async function getPixiv(): Promise<PixivClient | undefined> {
   const logger = Logger.configure('getPixiv')
-  const tokenPath = process.env.PIXIV_TOKEN_PATH ?? 'data/token.json'
+  const tokenPath =
+    process.env.PIXIV_TOKEN_PATH ??
+    process.env.PIXIV_AUTH_FILE ??
+    'data/token.json'
   if (!fs.existsSync(tokenPath)) {
     throw new Error(`Token file does not exist: ${tokenPath}`)
   }
