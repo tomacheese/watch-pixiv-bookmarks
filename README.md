@@ -26,6 +26,8 @@ services:
       DISCORD_CHANNEL_ID: 1234567890
       DISCORD_WEBHOOK_URL: https://...
       PIXIV_USER_ID: 1234556789
+      # Optional path to the writable token file inside the container
+      PIXIV_AUTH_FILE: /data/token.json
     restart: always
     init: true
 ```
@@ -35,7 +37,7 @@ services:
 Retrieve the refresh token by referring to [Retrieving Auth Token (with Selenium)](https://gist.github.com/upbit/6edda27cb1644e94183291109b8a5fde), etc.  
 Then, write the refresh token (`<REFRESH-TOKEN>`) in `data/token.json` in the following format.  
 The app rewrites this file on every run with the refreshed tokens, so it must be writable.  
-Outside Docker, the path can be changed with the `PIXIV_TOKEN_PATH` environment variable (default `data/token.json`).
+The token file path can be changed with `PIXIV_AUTH_FILE` (default `/data/token.json` in Docker, or `data/token.json` outside Docker). The legacy `PIXIV_TOKEN_PATH` variable is still supported and takes precedence when both are set. These variables contain file paths, not token values.
 
 ```json
 {
